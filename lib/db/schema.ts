@@ -39,7 +39,7 @@ export const accounts = pgTable(
     compoundKey: primaryKey({
       columns: [account.provider, account.providerAccountId],
     }),
-  })
+  }),
 );
 
 export const sessions = pgTable("sessions", {
@@ -72,7 +72,20 @@ export const prompts = pgTable("prompts", {
   createdAt: timestamp("createdAt", { mode: "date" }).defaultNow().notNull(),
 });
 
-// Relations
+export const projectFiles = pgTable("project_files", {
+  id: uuid("id").defaultRandom().primaryKey(),
+
+  projectId: uuid("projectId")
+    .notNull()
+    .references(() => projects.id, { onDelete: "cascade" }),
+
+  openaiFileId: text("openaiFileId").notNull(),
+  filename: text("filename").notNull(),
+  purpose: text("purpose").notNull(),
+
+  createdAt: timestamp("createdAt", { mode: "date" }).defaultNow().notNull(),
+});
+
 export const usersRelations = relations(users, ({ many }) => ({
   projects: many(projects),
   accounts: many(accounts),

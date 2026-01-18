@@ -5,13 +5,12 @@ import { db } from "@/lib/db";
 import { projects } from "@/lib/db/schema";
 import { eq, and } from "drizzle-orm";
 
-/* ---------------- GET single project ---------------- */
 export async function GET(
   req: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = await params; // ✅ FIX
+    const { id } = await params;
 
     const session = await getServerSession(authOptions);
     if (!session?.user?.id) {
@@ -39,13 +38,12 @@ export async function GET(
   }
 }
 
-/* ---------------- DELETE project ---------------- */
 export async function DELETE(
   req: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = await params; // ✅ FIX
+    const { id } = await params;
 
     const session = await getServerSession(authOptions);
     if (!session?.user?.id) {
@@ -76,13 +74,12 @@ export async function DELETE(
   }
 }
 
-/* ---------------- PUT update project ---------------- */
 export async function PUT(
   req: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = await params; // ✅ FIX
+    const { id } = await params;
 
     const session = await getServerSession(authOptions);
     if (!session?.user?.id) {

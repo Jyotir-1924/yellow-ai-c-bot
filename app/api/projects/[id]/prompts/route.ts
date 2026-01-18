@@ -5,21 +5,18 @@ import { db } from "@/lib/db";
 import { prompts, projects } from "@/lib/db/schema";
 import { eq, and, desc } from "drizzle-orm";
 
-// GET all prompts for a project
 export async function GET(
   req: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = await params; // ✅ FIX
+    const { id } = await params;
 
     const session = await getServerSession(authOptions);
 
     if (!session?.user?.id) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
-
-    // Verify project belongs to user
     const project = await db.query.projects.findFirst({
       where: and(
         eq(projects.id, id),
@@ -49,21 +46,18 @@ export async function GET(
   }
 }
 
-// POST create new prompt
 export async function POST(
   req: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = await params; // ✅ FIX
+    const { id } = await params;
 
     const session = await getServerSession(authOptions);
 
     if (!session?.user?.id) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
-
-    // Verify project belongs to user
     const project = await db.query.projects.findFirst({
       where: and(
         eq(projects.id, id),

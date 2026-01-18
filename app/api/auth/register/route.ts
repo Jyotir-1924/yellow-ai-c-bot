@@ -14,8 +14,6 @@ export async function POST(req: Request) {
         { status: 400 }
       );
     }
-
-    // Check if user already exists
     const existingUser = await db.query.users.findFirst({
       where: eq(users.email, email),
     });
@@ -26,11 +24,7 @@ export async function POST(req: Request) {
         { status: 400 }
       );
     }
-
-    // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
-
-    // Create user
     const [newUser] = await db
       .insert(users)
       .values({

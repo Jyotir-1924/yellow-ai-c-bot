@@ -5,7 +5,6 @@ import { db } from "@/lib/db";
 import { projects } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 
-// GET all projects for logged-in user
 export async function GET() {
   try {
     const session = await getServerSession(authOptions);
@@ -29,7 +28,6 @@ export async function GET() {
   }
 }
 
-// POST create new project (WITH ROLE)
 export async function POST(req: Request) {
   try {
     const session = await getServerSession(authOptions);

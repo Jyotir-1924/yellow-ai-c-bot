@@ -4,6 +4,14 @@ import { signIn } from "next-auth/react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import {
+  Box,
+  Button,
+  TextField,
+  Typography,
+  Paper,
+  Alert,
+} from "@mui/material";
 
 export default function SignIn() {
   const router = useRouter();
@@ -30,7 +38,7 @@ export default function SignIn() {
         router.push("/dashboard");
         router.refresh();
       }
-    } catch (error) {
+    } catch {
       setError("Something went wrong");
     } finally {
       setLoading(false);
@@ -38,56 +46,58 @@ export default function SignIn() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <div className="max-w-md w-full space-y-8 p-8 bg-white rounded-lg shadow">
-        <div>
-          <h2 className="text-3xl font-bold text-center">Sign In</h2>
-        </div>
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-          {error && (
-            <div className="bg-red-50 text-red-500 p-3 rounded">{error}</div>
-          )}
-          <div>
-            <label htmlFor="email" className="block text-sm font-medium">
-              Email
-            </label>
-            <input
-              id="email"
-              type="email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
-            />
-          </div>
-          <div>
-            <label htmlFor="password" className="block text-sm font-medium">
-              Password
-            </label>
-            <input
-              id="password"
-              type="password"
-              required
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
-            />
-          </div>
-          <button
-            type="submit"
+    <Box
+      minHeight="100vh"
+      display="flex"
+      alignItems="center"
+      justifyContent="center"
+    >
+      <Paper elevation={0} sx={{ p: 4, width: 420 }}>
+        <Typography variant="h4" textAlign="center" gutterBottom>
+          Sign In
+        </Typography>
+
+        {error && <Alert severity="error">{error}</Alert>}
+
+        <Box component="form" mt={2} onSubmit={handleSubmit}>
+          <TextField
+            label="Email"
+            type="email"
+            fullWidth
+            margin="normal"
+            required
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+
+          <TextField
+            label="Password"
+            type="password"
+            fullWidth
+            margin="normal"
+            required
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+
+          <Button
+            fullWidth
+            variant="contained"
+            sx={{ mt: 3 }}
             disabled={loading}
-            className="w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white rounded-md disabled:opacity-50"
+            type="submit"
           >
             {loading ? "Signing in..." : "Sign In"}
-          </button>
-        </form>
-        <p className="text-center text-sm">
+          </Button>
+        </Box>
+
+        <Typography textAlign="center" mt={3} variant="body2">
           Don't have an account?{" "}
-          <Link href="/auth/signup" className="text-blue-600 hover:underline">
+          <Link href="/auth/signup" style={{ color: "#6366f1" }}>
             Sign Up
           </Link>
-        </p>
-      </div>
-    </div>
+        </Typography>
+      </Paper>
+    </Box>
   );
 }

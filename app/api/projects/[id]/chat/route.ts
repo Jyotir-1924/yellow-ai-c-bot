@@ -36,16 +36,11 @@ export async function POST(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    /* -------- Params -------- */
     const { id } = await params;
-
-    /* -------- Auth -------- */
     const session = await getServerSession(authOptions);
     if (!session?.user?.id) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
-
-    /* -------- Fetch project + role -------- */
     const project = await db.query.projects.findFirst({
       where: and(
         eq(projects.id, id),
@@ -59,8 +54,6 @@ export async function POST(
         { status: 404 }
       );
     }
-
-    /* -------- Request body -------- */
     const { message } = await req.json();
     if (!message) {
       return NextResponse.json(
@@ -68,24 +61,16 @@ export async function POST(
         { status: 400 }
       );
     }
-
-    /* -------- Save user message -------- */
     await db.insert(prompts).values({
       projectId: id,
       role: "user",
       content: message,
     });
-
-    /* -------- Fetch chat history -------- */
     const history = await db.query.prompts.findMany({
       where: eq(prompts.projectId, id),
       orderBy: (prompts, { asc }) => [asc(prompts.createdAt)],
     });
-
-    /* -------- Build role-locked system prompt -------- */
     const systemPrompt = buildSystemPrompt(project.role);
-
-    /* -------- Prepare Gemini contents -------- */
     const contents = [
       {
         role: "user",
@@ -100,8 +85,6 @@ export async function POST(
         parts: [{ text: message }],
       },
     ];
-
-    /* -------- Call Gemini -------- */
     const response = await ai.models.generateContent({
       model: "gemini-2.5-flash-lite",
       contents,
@@ -115,8 +98,6 @@ export async function POST(
         { status: 500 }
       );
     }
-
-    /* -------- Save assistant response -------- */
     await db.insert(prompts).values({
       projectId: id,
       role: "assistant",

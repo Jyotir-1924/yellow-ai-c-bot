@@ -3,6 +3,14 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import {
+  Box,
+  Button,
+  TextField,
+  Typography,
+  Paper,
+  Alert,
+} from "@mui/material";
 
 export default function SignUp() {
   const router = useRouter();
@@ -31,7 +39,7 @@ export default function SignUp() {
       } else {
         router.push("/auth/signin");
       }
-    } catch (error) {
+    } catch {
       setError("Something went wrong");
     } finally {
       setLoading(false);
@@ -39,69 +47,67 @@ export default function SignUp() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <div className="max-w-md w-full space-y-8 p-8 bg-white rounded-lg shadow">
-        <div>
-          <h2 className="text-3xl font-bold text-center">Sign Up</h2>
-        </div>
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-          {error && (
-            <div className="bg-red-50 text-red-500 p-3 rounded">{error}</div>
-          )}
-          <div>
-            <label htmlFor="name" className="block text-sm font-medium">
-              Name
-            </label>
-            <input
-              id="name"
-              type="text"
-              required
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
-            />
-          </div>
-          <div>
-            <label htmlFor="email" className="block text-sm font-medium">
-              Email
-            </label>
-            <input
-              id="email"
-              type="email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
-            />
-          </div>
-          <div>
-            <label htmlFor="password" className="block text-sm font-medium">
-              Password
-            </label>
-            <input
-              id="password"
-              type="password"
-              required
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
-            />
-          </div>
-          <button
-            type="submit"
+    <Box
+      minHeight="100vh"
+      display="flex"
+      alignItems="center"
+      justifyContent="center"
+    >
+      <Paper elevation={0} sx={{ p: 4, width: 420 }}>
+        <Typography variant="h4" textAlign="center" gutterBottom>
+          Sign Up
+        </Typography>
+
+        {error && <Alert severity="error">{error}</Alert>}
+
+        <Box component="form" mt={2} onSubmit={handleSubmit}>
+          <TextField
+            label="Name"
+            fullWidth
+            margin="normal"
+            required
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+
+          <TextField
+            label="Email"
+            type="email"
+            fullWidth
+            margin="normal"
+            required
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+
+          <TextField
+            label="Password"
+            type="password"
+            fullWidth
+            margin="normal"
+            required
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+
+          <Button
+            fullWidth
+            variant="contained"
+            sx={{ mt: 3 }}
             disabled={loading}
-            className="w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white rounded-md disabled:opacity-50"
+            type="submit"
           >
             {loading ? "Signing up..." : "Sign Up"}
-          </button>
-        </form>
-        <p className="text-center text-sm">
+          </Button>
+        </Box>
+
+        <Typography textAlign="center" mt={3} variant="body2">
           Already have an account?{" "}
-          <Link href="/auth/signin" className="text-blue-600 hover:underline">
+          <Link href="/auth/signin" style={{ color: "#6366f1" }}>
             Sign In
           </Link>
-        </p>
-      </div>
-    </div>
+        </Typography>
+      </Paper>
+    </Box>
   );
 }
